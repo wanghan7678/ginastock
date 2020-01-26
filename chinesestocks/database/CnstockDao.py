@@ -7,12 +7,21 @@ import chinesestocks.BasicUtility as util
 class CnstockDao(db.DaoBase):
 
     def insertCnstock(self, cnstockList):
-        for item in cnstockList:
-            super().addOneItem(item)
+        super().addOneItem(cnstockList)
 
     def findByTscode(self, tscode):
         session = super().getSession()
         result = session.query(stk.Cnstock).filter(stk.Cnstock.tscode==tscode).all()
+        return result
+
+    def checkIfExist(self, tscode):
+        session = super().getSession()
+        result = session.query(func.count(stk.Cnstock.tscode)).filter(stk.Cnstock.tscode==tscode).scalar()
+        return result > 0
+
+    def getAllCnstock(self):
+        session = super().getSession()
+        result = session.query(stk.Cnstock).all()
         return result
 
 class CnstockMarketDailyDao(db.DaoBase):
@@ -46,4 +55,15 @@ class CnstockDatesDao(db.DaoBase):
         today = util.getTodayDateStr()
         todayDate = util.createDateFromGina(today)
         result = session.query(stk.CnstockDates).filter(stk.CnstockDates.tradeDate < todayDate).all()
+        return result
+
+class CnstockCompanyDao(db.DaoBase):
+
+    def insertCompanyList(self, dataList):
+        super().addItemList(dataList)
+
+
+    def getAllCompany(self):
+        session = super().getSession()
+        result = session.query(stk.CnstockCompany).all()
         return result

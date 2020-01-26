@@ -20,12 +20,11 @@ class DaoBase(object):
         for item in itemList:
             session.add(item)
         try:
+            print("insert data...")
             session.commit()
         except Exception as err:
-            print("add_item list integrity error")
-            print("Duplicated item....skipped.        "+str(err))
-        else:
-            print("insert data...")
+            print("add_item list error")
+            print(str(err))
         finally:
             print("close sql session")
             session.close()
